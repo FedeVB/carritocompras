@@ -1,6 +1,6 @@
 package com.carrito.app.controllers;
 
-import com.carrito.app.domain.entity.Authority;
+import com.carrito.app.domain.dto.UserDto;
 import com.carrito.app.domain.entity.User;
 import com.carrito.app.service.interfaces.UserService;
 import com.carrito.app.exceptions.UserNotFoundException;
@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 
 @RestController
 @RequestMapping(value = "/user")
+@CrossOrigin(value = "http://localhost:4200",methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 public class UserController {
 
     private final UserService userService;
@@ -32,12 +32,13 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody User user) {
-        user.setAuthorities(Arrays.asList(new Authority(3L,"ROLE_USER")));
-        User newUser = userService.save(user);
-
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    @GetMapping(value = "/email/{email}")
+    public ResponseEntity<UserDto> findByEmail(@PathVariable(value = "email") String email) {
+        if (!userService.existsByEmail(email)) {
+            throw new UserNotFoundException("User not found");
+        }
+        UserDto user = userService.findByEmailDto(email).get();
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping

@@ -1,6 +1,7 @@
 package com.carrito.app.domain.entity;
 
 import com.carrito.app.domain.enumerations.CartStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,7 +37,9 @@ public class Cart implements Serializable {
     @Enumerated(EnumType.STRING)
     private CartStatus status;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade =
+
+            CascadeType.MERGE)
     @JoinTable(name = "carts_products", joinColumns = @JoinColumn(name = "id_cart", referencedColumnName = "id")
             , inverseJoinColumns = @JoinColumn(name = "id_product", referencedColumnName = "id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"id_cart", "id_product"})})
@@ -46,6 +49,7 @@ public class Cart implements Serializable {
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_user",referencedColumnName = "id")
     @JsonIgnoreProperties(value = "cart")
+    @JsonIgnore
     private User user;
 
     public Cart(CartStatus status) {

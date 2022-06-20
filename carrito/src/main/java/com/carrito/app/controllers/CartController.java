@@ -22,6 +22,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/cart")
+@CrossOrigin(value = "http://localhost:4200", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class CartController {
 
     private final CartService cartService;
@@ -44,21 +45,6 @@ public class CartController {
             throw new CartNotFoundException("Cart not found");
         }
         return new ResponseEntity<>(cart, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/total/idCart/{idCart}")
-    public ResponseEntity<Map<String, Object>> totalPagar(@PathVariable(value = "idCart") Long idCart) {
-        Map<String, Object> response = new HashMap<>();
-        if (!cartService.existsById(idCart)) {
-            throw new CartNotFoundException("Cart not found");
-        }
-        Cart cart = cartService.findById(idCart).get();
-        ITotalDto totalDto = cartService.getTotal(idCart);
-        cart.setTotalPrice(CartUtil.getTotalPrice(totalDto, cart));
-        cart = cartService.save(cart);
-        response.put("cart", cart);
-        response.put("total", cart.getTotalPrice());
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(value = "/idUser/{idUser}")
@@ -101,6 +87,10 @@ public class CartController {
         cart.getProducts().add(product);
         product.getCarts().add(cart);
         cart = cartService.save(cart);
+        //Volvemos a calcular el precio
+        ITotalDto totalDto = cartService.getTotal(idCart);
+        cart.setTotalPrice(CartUtil.getTotalPrice(totalDto, cart));
+        cart = cartService.save(cart);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
@@ -120,6 +110,10 @@ public class CartController {
         product.getCarts().removeIf(cart1 -> {
             return Objects.equals(cart1.getId(), idCart);
         });
+        cart = cartService.save(cart);
+        //Volvemos a calcular el precio
+        ITotalDto totalDto = cartService.getTotal(idCart);
+        cart.setTotalPrice(CartUtil.getTotalPrice(totalDto, cart));
         cart = cartService.save(cart);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }

@@ -1,0 +1,15 @@
+<h1>Login de Usuario</h1>
+<form class="container_form" [formGroup]="myLoginForm!" (ngSubmit)="loginUser()">
+
+    <label for="email">Email </label>
+    <mat-form-field>
+        <input matInput id="email" formControlName="email" type="text">
+        <mat-error>{{getError('email')}}</mat-error>
+    </mat-form-field>
+    <label for="password">Password </label>
+    <mat-form-field>
+        <input matInput id="password" formControlName="password" type="password">
+        <mat-error>{{getError('password')}}</mat-error>
+    </mat-form-field>
+    <button [disabled]="!myLoginForm.valid">Login</button>
+</form>
