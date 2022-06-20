@@ -1,5 +1,6 @@
 package com.carrito.app.service.implementations;
 
+import com.carrito.app.domain.dto.UserDto;
 import com.carrito.app.domain.entity.User;
 import com.carrito.app.repository.UserRepository;
 import com.carrito.app.service.interfaces.UserService;
@@ -45,6 +46,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public Optional<UserDto> findByEmailDto(String email) {
+        return userRepository.findByUserEmailDto(email);
+    }
+
+    @Override
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
     }
@@ -66,9 +72,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        List<GrantedAuthority> authorities=user.getAuthorities().stream()
+        List<GrantedAuthority> authorities = user.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                 .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),user.isActivated(),user.isActivated(),user.isActivated(),user.isActivated(),authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActivated(), user.isActivated(), user.isActivated(), user.isActivated(), authorities);
     }
 }

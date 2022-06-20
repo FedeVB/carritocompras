@@ -1,5 +1,6 @@
 package com.carrito.app.service.interfaces;
 
+import com.carrito.app.domain.dto.UserDto;
 import com.carrito.app.domain.entity.User;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface UserService {
     Optional<User> findById(Long id);
 
     User save(User user);
+
+    Optional<UserDto> findByEmailDto(String email);
 
     boolean existsById(Long id);
 

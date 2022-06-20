@@ -12,14 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
-    private List<String> authorities;
-
-    public UserDto(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
 }

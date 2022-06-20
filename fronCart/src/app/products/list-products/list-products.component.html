@@ -1,0 +1,29 @@
+<h1>Listado de productos</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let product of products">
+            <th>{{product.id}}</th>
+            <th>{{product.title}}</th>
+            <th>{{product.description}}</th>
+            <th>{{product.price}}</th>
+            <button (click)="addProduct(product.id)">Agregar al carrito</button>
+            <button (click)="takeProduct(product.id)">Quitar del carrito</button>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+        </tr>
+    </tfoot>
+</table>
